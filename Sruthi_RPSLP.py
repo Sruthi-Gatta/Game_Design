@@ -1,65 +1,117 @@
 import random
-from random import randrange
-
-converter = {'Rock': 0, 'Spock': 1, 'Paper': 2, 'Lizard': 3, 'Scissors': 4}
-objects = {'R': 'Rock', 'V': 'Spock', 'P': 'Paper', 'L': 'Lizard', 'S': 'Scissors'}
-
-
-# Retrieves the number (aka value) of the corresponding name (aka key)
-def name_to_number(name):
-    if name in converter.keys():
-        return converter[name]
-    else:
-        print ("Error: There is no '" + name + "' in " + str(converter.keys()))
 
 
 def player():
-    flag = True
-    user_input = raw_input("Player: please enter your choice")
-    while flag:
-        if objects.keys().__contains__(user_input):
-            flag = False
-            print "Valid input", objects.__getitem__(user_input)
-        else:
-            print "Not a valid input, enter a valid input"
-    return user_input
+    """
+        Ask user to input objects
+        Check if the input is valid
+        If the input is valid, return a string that represents the object
+        Else print out error message and keep asking until getting a valid input
+    """
+
+    your_input = input(
+        "What do you want ? R (Rock) / P (Paper) / S (Scissors) / L (Lizard) / V (Spock) : ")
+    if your_input == "R":
+        return "R"
+    elif your_input == "P":
+        return "P"
+    elif your_input == "S":
+        return "S"
+    elif your_input == "L":
+        return "L"
+    elif your_input == "V":
+        return "V"
+    else:
+        print(f"{your_input} : INVALID ENTRY")
+        return player()
 
 
 def computer():
-    computer_choice = random.choice(objects.keys())
-    return computer_choice
+    """Computer randomly picks an object and returns the string"""
+
+    rand_comp = random.randrange(0, 5)
+    if rand_comp == 0:
+        return "R"
+    elif rand_comp == 1:
+        return "P"
+    elif rand_comp == 2:
+        return "S"
+    elif rand_comp == 3:
+        return "L"
+    elif rand_comp == 4:
+        return "V"
+    else:
+        return "INVALID"
 
 
 def game():
-    # converts name to player_number using name_to_number
-    # compute random guess for comp_number using random.randrange()
-    # compute difference of player_number and comp_number modulo five
-    player_choice = objects.__getitem__(player())
-    comp_choice = objects.__getitem__(computer())
-    result = (name_to_number(player_choice) - name_to_number(comp_choice)) % 5
-    # Announce the opponents to each other
-    print 'Player chooses ' + player_choice
-    print 'Computer chooses ' + comp_choice
+    """
+    Return True if player wins else False
+    If a tie happens, the process is repeated until a winner is found
+    Print out messages for each round
+    Print out winner if found and return bool
+    """
 
-    # Setup the game's rules
-    win = result == 1 or result == 2
-    lose = result == 3 or result == 4
-    if win:
-        print 'Player wins!\n'
+    player_ip = player()
+    computer_ip = computer()
+    print(f"player_input: {player_ip}")
+    print(f"computer_input: {computer_ip}")
+
+    if player_ip == computer_ip:
+        print("Oh , its a tie. The Game is still on")
+        return game()
+    elif player_ip == "S" and computer_ip == "P":
+        print("Hurray! You Won")
         return True
-    elif lose:
-        print 'Computer wins!\n'
-        return False
+    elif player_ip == "P" and computer_ip == "R":
+        print("Hurray! You Won")
+        return True
+    elif player_ip == "R" and computer_ip == "L":
+        print("Hurray! You Won")
+        return True
+    elif player_ip == "L" and computer_ip == "V":
+        print("Hurray! You Won")
+        return True
+    elif player_ip == "V" and computer_ip == "S":
+        print("Hurray! You Won")
+        return True
+    elif player_ip == "S" and computer_ip == "L":
+        print("Hurray! You Won")
+        return True
+    elif player_ip == "L" and computer_ip == "P":
+        print("Hurray! You Won")
+        return True
+    elif player_ip == "P" and computer_ip == "V":
+        print("Hurray! You Won")
+        return True
+    elif player_ip == "V" and computer_ip == "R":
+        print("Hurray! You Won")
+        return True
+    elif player_ip == "R" and computer_ip == "S":
+        print("Hurray! You Won")
+        return True
     else:
-        print 'Player and computer tie!\n'
-        game()
+        print("Loser, the Computer Wins !")
+        return False
 
 
-# Main Program --
-print "Testing Player Assert"
-assert player() in ['R', 'P', 'S', 'L', 'V']
-print "Testing Computer Assert"
-assert computer() in ['R', 'P', 'S', 'L', 'V']
-print "Testing game bool "
-assert type(game()) is bool
 game()
+
+import unittest
+from RPS import *
+
+
+class RPS_unit(unittest.TestCase):
+    def test_player(self):
+        assert player() in ['R', 'P', 'S', 'L', 'V']
+
+    def test_computer(self):
+        assert computer() in ['R', 'P', 'S', 'L', 'V']
+
+    def test_game(self):
+        assert type(game()) is bool
+
+
+if __name__ == '__main__':
+    unittest.main()
+
